@@ -1,0 +1,30 @@
+/* Put Application specific CSS here. */
+#wrapper {
+	font-size:14px;
+}
+
+#rssText {
+	position:relative;
+	top:30px;
+	padding:0;
+}
+
+#rssText dl {
+	color:#555;
+}
+#rssText dt {
+	padding:10px 10px 5px 10px;
+	border-top:1px solid #666;
+}
+
+#rssText dt a {
+	font-weight:bold;
+	font-size:larger;
+	color:#000;
+}
+
+#rssText dd {
+	padding:0 10px 10px 10px;
+	margin:0;
+	border-bottom:1px solid #000;
+}
