@@ -1,0 +1,9 @@
+{
+	"id": "com.selfanimation.rssreader",
+	"version": "1.0.0",
+	"vendor": "Self Animation",
+	"type": "web",
+	"main": "index.html",
+	"title": "rssReader",
+	"icon": "icon.png"
+}
