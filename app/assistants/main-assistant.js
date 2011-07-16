@@ -24,7 +24,7 @@ function MainAssistant() {
 
 MainAssistant.prototype.setupCommandMenu = function() {
 	this.controller.setupWidget(Mojo.Menu.viewMenu, undefined, 
-	                                   		{items:	[{label:'Results', submenu:'type-menu'},
+	                                   		{items:	[{label:'Results-branch', submenu:'type-menu'},
 											    	 {label:$L('Change Region'), submenu:'category-menu'}]});
 
 	this.categoryMenuModel = { onChoose: MainAssistant.prototype.popupHandler, items: [
