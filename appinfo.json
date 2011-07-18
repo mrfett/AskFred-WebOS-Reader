@@ -4,6 +4,6 @@
 	"vendor": "Self Animation",
 	"type": "web",
 	"main": "index.html",
-	"title": "rssReader",
+	"title": "AskFred Reader",
 	"icon": "icon.png"
 }
