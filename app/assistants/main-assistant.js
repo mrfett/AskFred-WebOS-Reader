@@ -22,68 +22,6 @@ function MainAssistant() {
 	   that needs the scene controller should be done in the setup function below. */
 }
 
-MainAssistant.prototype.setupCommandMenu = function() {
-	this.controller.setupWidget(Mojo.Menu.viewMenu, undefined, 
-	                                   		{items:	[{label:'Results-branch', submenu:'type-menu'},
-											    	 {label:$L('Change Region'), submenu:'category-menu'}]});
-
-	this.categoryMenuModel = { onChoose: MainAssistant.prototype.popupHandler, items: [
-		{label: $L('All'), command:'cat-all'}, 
-        {label: $L('Midwest'), command:'cat-midwest'}, 
-        {label: $L('New York City'), command:'cat-nyc'}, 
-        {label: $L('Mid Atlantic'), command:'cat-midatlantic'},
-		// {label: $L('Mid Atlantic'), command:'cat-national'},
-		// {label: $L('Non-US'), command:'cat-nonus'},
-		// {label: $L('North Atlantic'), command:'cat-northatlantic'},
-		// {label: $L('Pacific Coast'), command:'cat-pacificcoast'},
-		// {label: $L('Rocky Mountain'), command:'cat-rockymountain'},
-		// {label: $L('South East'), command:'cat-southeast'},
-		// {label: $L('South West'), command:'cat-southwest'},
-	]};
-
-	this.typeMenuModel = { label: $L('Type'), items: [
-		{label: 'Upcoming Events', command: 'upcoming'},
-		{label: 'Results', command: 'results'}
-	]};
-	
-	this.controller.setupWidget('category-menu', Mojo.Event.command, this.categoryMenuModel);
-	this.controller.setupWidget('type-menu', Mojo.Event.command, this.typeMenuModel);	
-}
-
-// MainAssistant.prototype.handleCommand = function() {
-	// console.info('+++++ Expecting: ' + event.type + ' +++++');
-	// console.info('+++++ To equal: ' + Mojo.Event.command + ' +++++')
-	// console.info('+++++ Command: ' + event.command + '  +++++');
-	// // if(event.type === Mojo.Event.command) {
-	// if(event.type === 'mojo-tap') {
-		// switch(event.command)
-		// {
-			// case 'cat-all':
-				// this.url = all;
-				// console.info('======= SELECTED ALL');
-			// break;
-			// case 'cat-midwest':
-				// url = midwest;
-				// console.info('======= SELECTED MIDWEST');
-			// break;
-			// case 'cat-nyc':
-				// url = nyc;
-				// console.info('======= SELECTED NYC');
-			// break;
-			// // case 'cat-unfiled':
-				// // this.controller.get('message').update('Unfiled selected')
-			// // break;
-			// default:
-				// Mojo.Controller.errorDialog("Got command " + event.command);
-				// console.info('XXXXXX NOTHING SELECTED');
-			// break;
-		// }
-	// }
-// 	
-	// // url = midwest;
-	// this.getRss(url);
-// }
-
 
 MainAssistant.prototype.popupHandler = function(command) {
 	console.info('+++++ Command is: ' + command);
@@ -119,7 +57,7 @@ MainAssistant.prototype.popupHandler = function(command) {
 
 MainAssistant.prototype.getRss = function(currentUrl) {
 	
-	$('rssText').update("Getting xml...");
+	$('rssText').update("Downloading xml...");
 	
 	var request = new Ajax.Request(currentUrl, {
 		method: 'get',
@@ -170,19 +108,119 @@ MainAssistant.prototype.setup = function() {
 	$('rssText').update("testing.....");
 	this.getRss(url);
 	//this.setupMenu();
-	this.setupCommandMenu();
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
 	
+	this.controller.setupWidget(Mojo.Menu.viewMenu,
+	  	this.attributes = {
+	    	spacerHeight: 20,
+	    	menuClass: 'no-fade',
+		},
+		this.model = {
+			visible: true,
+			items: [
+	        	{width: Mojo.Environment.DeviceInfo.screenWidth, command: "one", items: [
+	        		{label: "Upcoming", width: Mojo.Environment.DeviceInfo.screenWidth / 2, command: "upcoming"},
+        			{label: "Region", width: Mojo.Environment.DeviceInfo.screenWidth / 2, command: "changeRegion"}
+        		]}
+	        ]
+		}
+	);
 	/* add event handlers to listen to events from widgets */
 }
+
 
 MainAssistant.prototype.activate = function(event) {
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
+	this.controller.handleCommand = function(event) {
+		console.info('xxxx Expecting: ' + event.type + " xxxx");
+		console.info('xxxx To equal: ' + Mojo.Event.command + " xxxx");
+		console.info('xxxx Command is:' + event.command);
+		if (event.type === Mojo.Event.command) {
+	    	switch (event.command) {
+	      		case "changeRegion":
+					console.info('xxxx Change Region has been chosen xxxx');
+					this.popupSubmenu({
+				      onChoose: MainAssistant.prototype.popupHandler,
+				      // placeNear: event.target,
+				      items: [
+				        {label: 'All Regions', command: 'all'},
+				        {label: 'Midwest', command: 'midwest'},
+				        {label: 'Great Lakes', command: 'greatLakes'},
+				        {label: 'Metropolitan NYC', command: 'nyc'},
+				        {label: 'Mid-Atlantic', command: 'midatlantic'},
+				        {label: 'USA', command: 'national'},
+				        {label: 'Non-USA', command: 'nonUS'},
+				        {label: 'North-Atlantic', command: 'northAtlantic'},
+				        {label: 'Pacific Coast', command: 'pacificCoast'},
+				        {label: 'Pacific Northwest', command: 'pacificNorthwest'},
+				        {label: 'Rocky Mountain', command: 'rockyMountain'},
+				        {label: 'Southeast', command: 'southEast'},
+				        {label: 'Southwest', command: 'southWest'},
+				      ]
+				    });
+					break;
+	        	default:
+	        		console.info('xxxx Default Switch xxxx');
+					break;
+	      	}
+	  	}
+	};
+	
+	MainAssistant.prototype.popupHandler = function(command) {
+		console.info("++++ Command is: " + command);
+		switch(command) {
+			case "all":
+				url = all;
+				break;
+			case "midwest":
+				url=midwest;
+				break;
+			case "greatLakes":
+				url=greatLakes;
+				break;
+			case "nyc":
+				url=nyc;
+				break;
+			case "midAtlantic":
+				url = midAtlantic;
+				break;
+			case "national":
+				url = national;
+				break;
+			case "nonUS":
+				url = nonUS;
+				break;
+			case "northAtlantic":
+				url = northAtlantic;
+				break;
+			case "pacificCoast":
+				url = pacificCoast;
+				break;
+			case "pacificNorthwest":
+				url = pacificNorthwest;
+				break;
+			case "rockyMountain":
+				url = rockyMountain;
+				break;
+			case "southEast":
+				url = southEast;
+				break;
+			case "southWest":
+				url = southWest;
+				break;
+			default:
+				url = all;
+				console.info("---- No case matched");
+				break;				
+		};
+		console.info("---- Variable loaded:" + url);
+		this.getRss(url);
+	};
+		
 }
-
 
 MainAssistant.prototype.deactivate = function(event) {
 	/* remove any event handlers you added in activate and do any other cleanup that should happen before
