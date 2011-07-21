@@ -217,6 +217,16 @@ MainAssistant.prototype.activate = function(event) {
 				break;				
 		};
 		console.info("---- Variable loaded:" + url);
+		Mojo.Menu.viewMenu.model = {
+			visible: true,
+			items: [
+	        	{width: Mojo.Environment.DeviceInfo.screenWidth, command: "one", items: [
+	        		{label: "Upcoming", width: Mojo.Environment.DeviceInfo.screenWidth / 2, command: "upcoming"},
+        			{label: command, width: Mojo.Environment.DeviceInfo.screenWidth / 2, command: "changeRegion"}
+        		]}
+	        ]
+		}
+		this.controller.modelChanged(Mojo.Menu.viewMenu.model);
 		this.getRss(url);
 	};
 		
